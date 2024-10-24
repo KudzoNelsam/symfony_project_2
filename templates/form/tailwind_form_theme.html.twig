@@ -1,0 +1,69 @@
+{# templates/form/tailwind_form_theme.html.twig #}
+
+{# Block pour le début du formulaire #}
+{% block form_start %}
+<form method="{{ form.vars.method }}" action="{{ form.vars.action }}" {% if form.vars.enctype is defined %}enctype="{{ form.vars.enctype }}"{% endif %}>
+    {% endblock %}
+
+    {# Block pour la fin du formulaire #}
+    {% block form_end %}
+</form>
+{% endblock %}
+
+{# Block pour une ligne complète de formulaire (incluant erreurs) #}
+{% block form_row %}
+    <div class="mb-2">
+        {{ form_label(form) }}
+        <div class="mt-1">
+            {{ form_widget(form, {'attr': {'class': 'block w-full bg-gray-100 text-gray-700 border rounded p-2 leading-tight focus:outline-none focus:bg-white'}}) }}
+        </div>
+        {# Affichage des erreurs de formulaire #}
+        {{ form_errors(form) }}
+    </div>
+{% endblock %}
+
+{# Block pour le label d'un champ #}
+{% block label %}
+    <label {{ block('widget_attributes') }} class="block text-gray-700 text-sm font-bold mb-2">
+        {{ label|trans }}
+    </label>
+{% endblock %}
+
+{# Block pour les erreurs d'un champ #}
+{% block form_errors %}
+    {% if errors|length > 0 %}
+        <div class="text-red-600 text-sm italic mt-1">
+            {% for error in errors %}
+                {{ error.message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{# Block pour le champ de type "textarea" #}
+{% block textarea_widget %}
+    <textarea {{ block('widget_attributes') }} class="block w-full bg-gray-100 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white">{{ value }}</textarea>
+{% endblock %}
+
+{# Block pour le champ de type "checkbox" #}
+{% block checkbox_widget %}
+    <div class="flex items-center w-4">
+        <input type="checkbox" {{ block('widget_attributes') }} class="form-checkbox h-4 w-4 text-blue-600 focus:ring-blue-500" />
+    </div>
+{% endblock %}
+
+{# Block pour le champ de type "radio" #}
+{% block radio_widget %}
+    <input type="radio" {{ block('widget_attributes') }} class="form-radio h-4 w-4 text-blue-600 focus:ring-blue-500" />
+{% endblock %}
+
+{# Block pour le champ de type "select" #}
+{% block choice_widget %}
+    <select {{ block('widget_attributes') }} class="block w-full bg-gray-100 text-gray-700 border rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white">
+        {% for child in form %}
+            <option value="{{ child.vars.value }}" {% if child.vars.selected %}selected{% endif %}>
+                {{ child.vars.label|trans }}
+            </option>
+        {% endfor %}
+    </select>
+{% endblock %}
